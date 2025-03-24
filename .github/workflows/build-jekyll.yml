@@ -32,6 +32,10 @@ jobs:
           bundle config set force_ruby_platform true
           bundle install --jobs 4 --retry 3
 
+      # 更新 rake 版本
+      - name: Update rake
+        run: bundle update rake
+
       # 构建网站
       - name: Build site
         run: bundle exec jekyll build
