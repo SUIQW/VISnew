@@ -40,10 +40,15 @@ jobs:
       - name: Build site
         run: bundle exec jekyll build
 
-      - name: Install dependencies
-        run: bundle config set frozen false
-              bundle install
-              bundle update rake
+      - name: Update dependencies
+        run: |
+            bundle config set frozen false  # 临时禁用冻结模式
+            bundle update rake
+            bundle config set frozen true
+            git add Gemfile.lock
+            git commit -m "Update rake gem"
+            git push origin main
+
       # 部署到GitHub Pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
