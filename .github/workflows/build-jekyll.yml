@@ -22,13 +22,13 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'  # Downgrade to Ruby 2.7 if necessary
+          ruby-version: '3.0'  # Downgrade to Ruby 2.7 if necessary
 
       # Ensure all required packages are installed
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ruby3.1
+          sudo apt-get install -y ruby3.0
 
       # Use GitHub Deploy Action to build and deploy to Github
       - uses: jeffreytse/jekyll-deploy-action@v0.5.1
