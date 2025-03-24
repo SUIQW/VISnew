@@ -1,44 +1,40 @@
-name: Github Pages
+name: GitHub Pages
 
 on:
   push:
     branches:
-      - master  # Here source code branch is `master`, it could be other branch
+      - master
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4  # 升级到最新版
 
-      # Use GitHub Actions' cache to cache dependencies on servers
-      - uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
+      # 设置Ruby环境（核心修改）
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'  # Ensure the correct version of Ruby is set up
+          ruby-version: '3.0'       # 明确指定3.0版本
+          bundler-cache: true       # 自动处理bundle缓存
+          cache-version: 1          # 缓存版本标识
 
-      # Ensure all required packages are installed
-      - name: Install dependencies
+      # 安装系统依赖（仅必要组件）
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ruby-full  # Install the full Ruby package instead of a specific version
+          sudo apt-get install -y zlib1g-dev build-essential
 
-      # Use GitHub Deploy Action to build and deploy to Github
-      - uses: jeffreytse/jekyll-deploy-action@v0.5.1
+      # 安装项目依赖
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      # 使用现代部署方式
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          provider: 'github'
-          token: ${{ secrets.GITHUB_TOKEN }} # It's your Personal Access Token(PAT)
-          repository: ''             # Default is current repository
-          branch: 'gh-pages'         # Default is gh-pages for github provider
-          jekyll_src: './'           # Default is root directory
-          jekyll_cfg: '_config.yml'  # Default is _config.yml
-          jekyll_baseurl: '/jekyll-theme-yat'  # Default is empty
-          cname: ''                  # Default is to not use a cname
-          actor: ''                  # Default is the GITHUB_ACTOR
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          keep_files: false
