@@ -46,3 +46,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
+      - name: Fix Git Ownership
+        run: git config --global --add safe.directory /github/workspace
