@@ -30,6 +30,7 @@ jobs:
       - name: Bundle install
         run: |
           bundle config set force_ruby_platform true
+          bundle config set frozen false  # Add this line to disable frozen mode
           bundle install --jobs 4 --retry 3
 
       # 更新 rake 版本
@@ -40,12 +41,12 @@ jobs:
       - name: Build site
         run: bundle exec jekyll build
 
-
       # 部署到GitHub Pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
+
       - name: Fix Git Ownership
         run: git config --global --add safe.directory /github/workspace
