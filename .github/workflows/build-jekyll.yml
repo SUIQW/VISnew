@@ -1,44 +1,35 @@
-name: GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  build_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 设置Ruby环境
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'  # 升级到Ruby 3.1
-          bundler-cache: true
+          ruby-version: '3.2'  # 升级到 Ruby 3.2
 
-      # 安装编译依赖
-      - name: Install build tools
+      - name: Clean dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential patch
+          rm -rf Gemfile.lock
+          bundle clean
 
-      # 安装项目依赖
-      - name: Bundle install
-        run: |
-          bundle config set force_ruby_platform true
-          bundle install --jobs 4 --retry 3
+      - name: Install dependencies
+        run: bundle install
 
-      # 构建网站
       - name: Build site
-        run: bundle exec jekyll build
+        run: |
+          bundle exec jekyll build
 
-      # 部署到GitHub Pages
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          publish_dir: _site
