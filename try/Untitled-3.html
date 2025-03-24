@@ -186,124 +186,158 @@ document.addEventListener('DOMContentLoaded', function(event) {
   window.addEventListener("load", initPhotoSwipe);
 </script>
 
-    
-    <!-- styles -->
-    <style>
-        :root {
-            --primary-color: #00aeef;
-        }
-
-
-        @media only screen and (max-width: 997px) {
-            body {
-                font-size: 15px;
-            }
-        }
-
-
-        .btn {
-            padding: 16px 30px;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.3s;
-        }
-
-        @media only screen and (max-width: 997px) {
-            .btn {
-                padding: 12px 25px;
-                font-weight: 500;
-            }
-        }
-
-        .btn:focus,
-        .btn:hover {
-            text-decoration: none;
-            outline: 0;
-        }
-
-        .btn-primary {
-            background-color: #eef2ff;
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .btn-primary:hover {
-            background-color: #dfe5fa;
-            color: var(--primary-color);
-        }
-
-        
-
-        .card {
-            border: 0;
-            box-shadow: 0px 15px 55px 0px rgb(0 0 0 / 4%);
-            border-radius: 10px;
-            transition: 0.2s ease;
-            margin-bottom: 30px;
-        }
-
-        .card-img-top {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .card-title {
-            text-transform: capitalize;
-            text-align: center;
-        }
-
-        .card-title a {
-            color: #222;
-            text-decoration: none;
-            transition: 0.2s ease;
-        }
-
-        .card-title a:hover {
-            color: var(--primary-color);
-        }
-
-        .card-icon {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            line-height: 35px;
-            background-color: var(--primary-color);
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s ease;
-            text-align: center;
-            border-radius: 50%;
-            box-shadow: 0px 15px 55px 0px rgb(0 0 0 / 4%);
-            z-index: 1;
-        }
-
-        .card-icon svg {
-            width: 70%;
-            height: 70%;
-            fill: #fff;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card:hover .card-icon {
-            visibility: visible;
-            opacity: 1;
-            bottom: -20px;
-        }
-
-    </style>
-
-
-
-
 <script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- 实验室简介 -->
+<style>
+  .mycontainerone {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px; /* 内容最大宽度 */
+      margin: 0 auto; /* 左右自动，实现居中+边缘间距 */
+  }
+  .myleft-column {
+      flex: 1;
+      line-height: 1.8;
+      color: #333;
+  }
+  .myright-column img {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+  }
+  .myh2 {
+      color: #5f3d80;
+      border-bottom: 2px solid #bcaaa4;
+      padding-bottom: 5px;
+  }
+  .myp {
+      margin-top: 15px;
+      font-size: 20px;
+  }
+</style>
+
+
+<style>
+  /* 新增父容器样式 */
+  .grid-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      margin: 0 100px;
+  }
+
+  .mycontainer {
+      position: relative;
+      /* 基础宽度（大屏幕每行4个） */
+      flex-basis: calc(25% - 20px);
+      padding-top: 25%; /* 保持1:1比例 */
+  }
+
+  /* 中等屏幕适配（每行3个） */
+  @media (max-width: 1200px) {
+      .mycontainer {
+          flex-basis: calc(33.33% - 20px);
+          padding-top: 33.33%;
+      }
+  }
+
+  /* 小屏幕适配（每行2个） */
+  @media (max-width: 800px) {
+      .mycontainer {
+          flex-basis: calc(50% - 20px);
+          padding-top: 50%;
+      }
+  }
+
+  /* 超小屏幕适配（单行显示） */
+  @media (max-width: 500px) {
+      .mycontainer {
+          flex-basis: 100%;
+          padding-top: 100%;
+      }
+  }
+
+  /* 原有的容器样式保持不变 */
+  .myimage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      clip-path: circle(45%);
+      transition: opacity 0.5s ease;
+  }
+
+  .mycontainer:hover .myimage {
+      opacity: 0;
+  }
+
+  .myoverlay {
+      position: absolute;
+      bottom: 50%;
+      left: 0;
+      right: 100%;
+      background-color: #92e7c8;
+      overflow: hidden;
+      width: 0;
+      height: 50%;
+      transition: .5s ease;
+      clip-path: circle(60% at bottom);
+  }
+
+  .mycontainer:hover .myoverlay {
+      width: 100%;
+      left: 0;
+  }
+
+  .mytext {
+      white-space: nowrap; 
+      color: #000;
+      font-size: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+
+  .mytextbig {
+      color: #fff;
+      font-size: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+
+  .myoverlayy {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 100%;
+      background-color: #92e7c8;
+      overflow: hidden;
+      width: 0;
+      height: 50%;
+      transition: .5s ease;
+      border-top: 2px solid #000;
+      clip-path: circle(60% at top);
+  }
+
+  .mycontainer:hover .myoverlayy {
+      width: 100%;
+      left: 0;
+  }
+  .titlebow
+    {
+       text-align:center;
+    }
+    
+</style>
+
+
 </head>
 <body>
 
@@ -332,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
           </label>
 
           <div class="trigger">
-<a class="page-link" href="/">HOME</a><a class="page-link" href="/archives.html">ARCHIVES</a><a class="page-link" href="/categories.html">CATEGORIES</a><a class="page-link" href="/try/Untitled-1.html">TIAO</a><a class="page-link" href="/about.html">ABOUT</a>
+<a class="page-link" href="/">首页</a><a class="page-link" href="/news.html">新闻动态</a><a class="page-link" href="/team.html">团队</a><a class="page-link" href="/works.html">研究成果</a><a class="page-link" href="/about.html">关于</a>
 
 
 
@@ -529,6 +563,8 @@ function googleTranslateElementInit() {
     }
   });
 </script>
+
+
 <div class="theme-toggle">
   <input type="checkbox" id="theme-switch">
   <label for="theme-switch">
@@ -660,6 +696,79 @@ function googleTranslateElementInit() {
     });
   })();
 </script>
+
+
+
+<div class="mycontainerone">
+  <div class="myleft-column">
+      <h2 class = "myh2">平台简介</h2>
+      <p class = "myp">VisSpectral光谱成像目标感知平台（Tsinghua Laboratory of Brain and Intelligence, 简称THBI）是清华大学专注于脑科学与人工智能领域的交叉科学研究所，下设多学科研究团队。脑与智能实验室的目标是聚集脑科学、计算神经科学、认知科学和人工智能领域的国内外顶尖学者，提供一个国际化和交叉科学的工作环境以及一流的核心实验平台，探索智能本质这个核心科学问题。（改一下改一下）</p>
+  </div>
+  <div class="myright-column">
+      <img src="/assets/images/banners/home.jpeg" alt="神经细胞示意图">
+  </div>
+</div>
+
+<div class = titlebow>
+  <h1 style = "font-size:50px;color: #5f3d80;">研究方向</h1>
+</div>
+
+
+
+
+<div class="grid-container">
+  <div class="mycontainer">
+      <img src="/assets/images/banners/home.jpeg" alt="Avatar" class="myimage"><p class = "mytextbig">高光谱显著性目标检测</p></img>
+  <div class="myoverlay">
+      <div class="mytext"><a href="/index.html">自然场景</a></div>
+  </div>
+  <div class="myoverlayy">
+      <div class="mytext"><a href="/index.html">遥感场景</a></div>
+  </div>
+  </div>
+  <div class="mycontainer">
+      <img src="/assets/images/banners/home.jpeg" alt="Avatar" class="myimage"><p class = "mytextbig">高光谱显著性目标检测</p></img>
+  <div class="myoverlay">
+      <div class="mytext"><a href="/index.html">自然场景</a></div>
+  </div>
+  <div class="myoverlayy">
+      <div class="mytext"><a href="/index.html">遥感场景</a></div>
+</div>
+  </div>
+  <!-- 其他容器 -->
+  <div class="mycontainer">
+    <img src="/assets/images/banners/home.jpeg" alt="Avatar" class="myimage"><p class = "mytextbig">多光谱目标检测</p></img>
+    <div class="myoverlay">
+        <div class="mytext"><a href="/index.html">自然场景</a></div>
+    </div>
+    <div class="myoverlayy">
+        <div class="mytext"><a href="/index.html">无人机视角</a></div>
+  </div>
+  </div>
+  <div class="mycontainer">
+    <img src="/assets/images/banners/home.jpeg" alt="Avatar" class="myimage"><p class = "mytextbig">多光谱目标跟踪</p></img>
+    <div class="myoverlay">
+        <div class="mytext"><a href="/index.html">自然场景</a></div>
+    </div>
+    <div class="myoverlayy">
+        <div class="mytext"><a href="/index.html">无人机视角</a></div>
+  </div>
+  </div>
+  <div class="mycontainer">
+    <img src="/assets/images/banners/home.jpeg" alt="Avatar" class="myimage"><p class = "mytextbig">多光谱、多目标跟踪</p></img>
+    <div class="myoverlay" style = "clip-path: circle(50%);bottom: 25%;bottom: 0;height: 100%;">
+        <div class="mytext"><a href="/index.html">无人机视角</a></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
         <div class="framework">
@@ -674,13 +783,6 @@ function googleTranslateElementInit() {
   <!-- Post list links -->
   <ul class="post-list z-image-style">
     <!-- Top list item -->
-
-
-
-
-
-
-
 
 
 </section>
@@ -698,8 +800,7 @@ function googleTranslateElementInit() {
       another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
       <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a>
 </div>
-    </div>
-  </div>
+
 </footer>
 </body>
 </html>
