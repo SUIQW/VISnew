@@ -3,7 +3,7 @@ layout: post
 title: 第一个成果
 subtitle: 测试用的成果
 categories: markdown
-tags: [自然场景,高光谱显著性目标检测]
+tags: [伪装目标检测,高光谱]
 ---
 
 * 主标题
