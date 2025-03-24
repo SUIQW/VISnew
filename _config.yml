@@ -250,3 +250,9 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-spaceship
+
+
+# 添加sass配置
+sass:
+  sass_dir: _sass
+  style: compressed
